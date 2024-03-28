@@ -18,110 +18,116 @@ function Register() {
   const [preTypePasswordError, setPreTypePasswordError] = useState();
   const [loading, setLoading] = useState(false);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!userNameError && !passwordError && !preTypePasswordError) {
+      setLoading(true);
+      const data = {
+        username: userNameRef.current.value,
+        password: preTypePasswordRef.current.value,
+      };
+
+      register(data)
+        .then((res) => {
+          toast.success("Đăng ký thành công!", optionToast);
+        })
+        .catch((e) => {
+          toast.warning(`${e.response.data.message}`, optionToast);
+
+          if (e.response.status === 409) {
+            console.log(e.response.status);
+          }
+        })
+        .finally((res) => {
+          setLoading(false);
+        });
+    } else {
+      toast.error("Dữ liệu nhập chưa đầy đủ hoặc không hợp lệ!", optionToast);
+    }
+  };
+
   return (
     <div className={cx("wrapper")}>
       <div>
         <header className={cx("header")}>Đăng Ký</header>
+        <form onSubmit={handleSubmit}>
+          <div className={cx("input-group")}>
+            <div className={cx("label")}>Tài khoản:</div>
+            <input
+              className={cx("input")}
+              type={"text"}
+              ref={userNameRef}
+              placeholder="Tài khoản..."
+              onChange={() => setUserNameError()}
+              onBlur={(e) => {
+                const value = e.target.value;
 
-        <div className={cx("input-group")}>
-          <div className={cx("label")}>Tài khoản:</div>
-          <input
-            className={cx("input")}
-            type={"text"}
-            ref={userNameRef}
-            placeholder="Tài khoản..."
-            onChange={() => setUserNameError()}
-            onBlur={(e) => {
-              const value = e.target.value;
+                if (value.trim().length < 3) {
+                  setUserNameError("username phải lớn hơn hoặc bằng 3 ký tự!");
+                } else {
+                  setUserNameError();
+                }
+              }}
+            />
+            {userNameError && (
+              <p className={cx("text-error")}>{userNameError}</p>
+            )}
+          </div>
+          <div className={cx("input-group")}>
+            <div className={cx("label")}>Mật khẩu:</div>
+            <input
+              className={cx("input")}
+              type={"password"}
+              ref={passwordRef}
+              placeholder="Mật khẩu..."
+              onChange={() => setPasswordError()}
+              onBlur={(e) => {
+                const value = e.target.value;
+                if (value.trim().length < 6) {
+                  setPasswordError("password phải lớn hơn hoặc bằng 6 ký tự!");
+                } else {
+                  setPasswordError();
+                }
+              }}
+            />
+            {passwordError && (
+              <p className={cx("text-error")}>{passwordError}</p>
+            )}
+          </div>
+          <div className={cx("input-group")}>
+            <div className={cx("label")}>Nhập lại mật khẩu:</div>
+            <input
+              className={cx("input")}
+              type={"password"}
+              ref={preTypePasswordRef}
+              placeholder="Mật khẩu..."
+              onChange={() => setPreTypePasswordError()}
+              onBlur={(e) => {
+                const value = e.target.value;
+                if (value !== passwordRef.current.value) {
+                  setPreTypePasswordError(
+                    "password phải giống với các kí tự trong re-enter password!"
+                  );
+                } else {
+                  setPreTypePasswordError();
+                }
+              }}
+            />
+            {preTypePasswordError && (
+              <p className={cx("text-error")}>{preTypePasswordError}</p>
+            )}
+          </div>
+          <div className={cx("input-group")}>
+            <button
+              className={cx("btn-submit")}
+              disabled={loading}
+              onClick={handleSubmit}
+            >
+              {loading ? <LoadingIcon /> : "ĐĂNG KÝ"}
+            </button>
+          </div>
+        </form>
 
-              if (value.trim().length < 3) {
-                setUserNameError("username phải lớn hơn hoặc bằng 3 ký tự!");
-              } else {
-                setUserNameError();
-              }
-            }}
-          />
-          {userNameError && <p className={cx("text-error")}>{userNameError}</p>}
-        </div>
-        <div className={cx("input-group")}>
-          <div className={cx("label")}>Mật khẩu:</div>
-          <input
-            className={cx("input")}
-            type={"password"}
-            ref={passwordRef}
-            placeholder="Mật khẩu..."
-            onChange={() => setPasswordError()}
-            onBlur={(e) => {
-              const value = e.target.value;
-              if (value.trim().length < 6) {
-                setPasswordError("password phải lớn hơn hoặc bằng 6 ký tự!");
-              } else {
-                setPasswordError();
-              }
-            }}
-          />
-          {passwordError && <p className={cx("text-error")}>{passwordError}</p>}
-        </div>
-        <div className={cx("input-group")}>
-          <div className={cx("label")}>Nhập lại mật khẩu:</div>
-          <input
-            className={cx("input")}
-            type={"password"}
-            ref={preTypePasswordRef}
-            placeholder="Mật khẩu..."
-            onChange={() => setPreTypePasswordError()}
-            onBlur={(e) => {
-              const value = e.target.value;
-              if (value !== passwordRef.current.value) {
-                setPreTypePasswordError(
-                  "password phải giống với các kí tự trong re-enter password!"
-                );
-              } else {
-                setPreTypePasswordError();
-              }
-            }}
-          />
-          {preTypePasswordError && (
-            <p className={cx("text-error")}>{preTypePasswordError}</p>
-          )}
-        </div>
-        <div className={cx("input-group")}>
-          <button
-            className={cx("btn-submit")}
-            disabled={loading}
-            onClick={() => {
-              if (!userNameError && !passwordError && !preTypePasswordError) {
-                setLoading(true);
-                const data = {
-                  username: userNameRef.current.value,
-                  password: preTypePasswordRef.current.value,
-                };
-
-                register(data)
-                  .then((res) => {
-                    toast.success("Đăng ký thành công!", optionToast);
-                  })
-                  .catch((e) => {
-                    toast.warning(`${e.response.data.message}`, optionToast);
-
-                    if (e.response.status === 409) {
-                      console.log(e.response.status);
-                    }
-                  })
-                  .finally((res) => {
-                    setLoading(false);
-                  });
-              } else {
-                toast.error(
-                  "Dữ liệu nhập chưa đầy đủ hoặc không hợp lệ!",
-                  optionToast
-                );
-              }
-            }}
-          >
-            {loading ? <LoadingIcon /> : "ĐĂNG KÝ"}
-          </button>
-        </div>
         <div className={cx("input-group", "support")}>
           <div className={cx("hr")}></div>
           <h3 className={cx("support-title")}>Bạn đã có tài khoản?</h3>

@@ -1,7 +1,8 @@
 import request from "../utils/request";
+import { BASE_URL } from "./userServices";
 
 export const createMusic = async (data) => {
-  const res = await request.post("audio", data);
+  const res = await request.post(`${BASE_URL}/audio/`, data);
   return res.data;
 };
 
@@ -11,17 +12,17 @@ export const removeMusic = async (param) => {
 };
 
 export const getListMusic = async (data) => {
-  const res = await request.post("audio/find-all", data);
+  const res = await request.post(`${BASE_URL}/audio/find-all`, data);
   return res.data;
 };
 
 export const getMyMusic = async (data) => {
-  const res = await request.post("audio/find-all", data);
+  const res = await request.post(`${BASE_URL}/audio/find-all`, data);
   return res.data;
 };
 
 export const getMusic = async (param) => {
-  const res = await request.get("audio/" + param);
+  const res = await request.get(`${BASE_URL}/audio/` + param);
   return res.data;
 };
 

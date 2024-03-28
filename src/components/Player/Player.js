@@ -21,7 +21,7 @@ import {
 
 const cx = classNames.bind(styles);
 function Player() {
-  const baseURL = process.env.REACT_APP_BASE_URL;
+  const baseURL = "http://localhost:5000/";
   const playlistState = useSelector((state) => state.playlist);
   const isPlaying = playlistState.isPlaying;
   const music = playlistState.music;
@@ -83,7 +83,12 @@ function Player() {
         />
 
         <div>
-          <span style={{cursor:"pointer"}} onClick={()=>navigate(`/music/${music.id}`)}>{music.name}</span>
+          <span
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate(`/music/${music.id}`)}
+          >
+            {music.name}
+          </span>
           <small>{music.description}</small>
           <audio
             ref={audioRef}

@@ -17,82 +17,91 @@ function Login() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!userNameError && !passwordError) {
+      setLoading(true);
+      const data = {
+        username: userNameRef.current.value,
+        password: passwordRef.current.value,
+      };
+      login(data)
+        .then((res) => {
+          if (res) {
+            console.log(res);
+            storageToken.set(res);
+            navigate("/");
+          }
+        })
+        .catch((e) => {
+          toast.error("Tài khoản hoặc mật khẩu không chính xác!", optionToast);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  };
+
   return (
     <div className={cx("wrapper")}>
       <div>
         <header className={cx("header")}>Đăng Nhập</header>
-        <div className={cx("input-group")}>
-          <div className={cx("label")}>Tài khoản:</div>
-          <input
-            className={cx("input")}
-            type={"text"}
-            ref={userNameRef}
-            placeholder="Tài khoản..."
-            onChange={() => setUserNameError()}
-            onBlur={(e) => {
-              const values = e.target.value;
-              if (values.trim().length === 0) {
-                setUserNameError("Tài khoản không thể để trống");
-              } else {
-                setUserNameError();
-              }
-            }}
-          />
-          {userNameError && <p className={cx("text-error")}>{userNameError}</p>}
-        </div>
-        <div className={cx("input-group")}>
-          <div className={cx("label")}>Mật khẩu:</div>
-          <input
-            className={cx("input")}
-            type={"password"}
-            ref={passwordRef}
-            placeholder="Mật khẩu..."
-            onChange={() => setPasswordError()}
-            onBlur={(e) => {
-              const values = e.target.value;
-              if (values.trim().length === 0) {
-                setPasswordError("Mật khẩu không thể để trống");
-              } else {
-                setPasswordError();
-              }
-            }}
-          />
-          {passwordError && <p className={cx("text-error")}>{passwordError}</p>}
-        </div>
-        <div className={cx("input-group")}>
-          <button
-            className={cx("btn-submit")}
-            disabled={loading}
-            onClick={() => {
-              if (!userNameError && !passwordError) {
-                setLoading(true);
-                const data = {
-                  username: userNameRef.current.value,
-                  password: passwordRef.current.value,
-                };
-                login(data)
-                  .then((res) => {
-                    if (res) {
-                      console.log(res);
-                      storageToken.set(res);
-                      navigate("/");
-                    }
-                  })
-                  .catch((e) => {
-                    toast.error(
-                      "Tài khoản hoặc mật khẩu không chính xác!",
-                      optionToast
-                    );
-                  })
-                  .finally(() => {
-                    setLoading(false);
-                  });
-              }
-            }}
-          >
-            {loading ? <LoadingIcon /> : "ĐĂNG NHẬP"}
-          </button>
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className={cx("input-group")}>
+            <div className={cx("label")}>Tài khoản:</div>
+            <input
+              className={cx("input")}
+              type={"text"}
+              ref={userNameRef}
+              placeholder="Tài khoản..."
+              onChange={() => setUserNameError()}
+              onBlur={(e) => {
+                const values = e.target.value;
+                if (values.trim().length === 0) {
+                  setUserNameError("Tài khoản không thể để trống");
+                } else {
+                  setUserNameError();
+                }
+              }}
+            />
+            {userNameError && (
+              <p className={cx("text-error")}>{userNameError}</p>
+            )}
+          </div>
+          <div className={cx("input-group")}>
+            <div className={cx("label")}>Mật khẩu:</div>
+            <input
+              className={cx("input")}
+              type={"password"}
+              ref={passwordRef}
+              placeholder="Mật khẩu..."
+              onChange={() => setPasswordError()}
+              onBlur={(e) => {
+                const values = e.target.value;
+                if (values.trim().length === 0) {
+                  setPasswordError("Mật khẩu không thể để trống");
+                } else {
+                  setPasswordError();
+                }
+              }}
+            />
+            {passwordError && (
+              <p className={cx("text-error")}>{passwordError}</p>
+            )}
+          </div>
+          <div className={cx("input-group")}>
+            <button
+              className={cx("btn-submit")}
+              disabled={loading}
+              onClick={handleSubmit}
+            >
+              {loading ? <LoadingIcon /> : "ĐĂNG NHẬP"}
+            </button>
+          </div>
+        </form>
+
         <div className={cx("input-group", "support")}>
           <div className={cx("hr")}></div>
           <h3 className={cx("support-title")}>Bạn chưa có tài khoản?</h3>

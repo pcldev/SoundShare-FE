@@ -1,8 +1,4 @@
-import {
-  faBookmark,
-  faHouse,
-  faMagnifyingGlass,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBookmark, faHouse } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
 import { Link } from "react-router-dom";
@@ -16,11 +12,17 @@ function Sidebar() {
       <div>
         <ul className={cx("nav")}>
           <li>
-            <Link to="/">
-              <img
-                src={require("../../assets/images/logo.png")}
-                alt="MTP Entertainment"
-              />
+            <Link to="/" style={{ fontWeight: "bold", fontSize: "30px" }}>
+              <span style={{ color: "rgb(36 235 74)", fontSize: "30px" }}>
+                S
+              </span>
+              ound
+              <span
+                style={{ color: "rgb(36 235 74)", fontSize: "30px", margin: 0 }}
+              >
+                S
+              </span>
+              hare
             </Link>
           </li>
           <li>

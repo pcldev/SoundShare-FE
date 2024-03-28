@@ -85,7 +85,7 @@ function AddMusic() {
           </div>
           <div className={cx("from-group")}>
             <button
-              disabled={loadingPost ||  !!uploadSuccess === false}
+              disabled={loadingPost || !!uploadSuccess === false}
               onClick={() => {
                 if (
                   !!nameMusicRef.current.value &&
@@ -93,12 +93,15 @@ function AddMusic() {
                 ) {
                   if (!!uploadSuccess) {
                     setLoadingPost(true);
+                    console.log("uploadSuccess: ", uploadSuccess);
                     const data = {
                       name: nameMusicRef.current.value,
                       description: desMusicRef.current.value,
-                      fileId: uploadSuccess.id,
+                      fileId: uploadSuccess._id,
                       audioTypeIds: [1],
                     };
+
+                    console.log("data: ", data);
                     createMusic(data).then(() => {
                       setLoadingPost(false);
 
