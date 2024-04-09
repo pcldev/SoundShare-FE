@@ -21,7 +21,7 @@ import {
 
 const cx = classNames.bind(styles);
 function Player() {
-  const baseURL = "http://localhost:5000/";
+  const baseURL = "http://localhost:2906/";
   const playlistState = useSelector((state) => state.playlist);
   const isPlaying = playlistState.isPlaying;
   const music = playlistState.music;

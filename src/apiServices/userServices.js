@@ -1,6 +1,6 @@
 import request from "../utils/request";
 
-export const BASE_URL = "http://localhost:5000/api";
+export const BASE_URL = "http://localhost:2906/api";
 
 export const login = async (data) => {
   const res = await request.post(`${BASE_URL}/user/login`, data);
